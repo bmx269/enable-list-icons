@@ -1,0 +1,40 @@
+/* stylelint-disable no-descending-specificity */
+.wp-block-list-item[class*="has-icon__"] {
+	list-style: none;
+	display: flex;
+	gap: var(--icon-spacing, 0.5em);
+	align-items: baseline;
+
+	span.wp-block-list-item__icon {
+		line-height: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex-shrink: 0;
+		width: var(--icon-size, 1em);
+		height: var(--icon-size, 1em);
+		align-self: center;
+
+		svg {
+			color: currentcolor;
+			fill: currentcolor;
+			display: block;
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	// Default: icon appears after text (at end)
+	// The icon span is injected before </li>, so it naturally appears at the end.
+
+	// Support for stroke-based icons (e.g., Lucide)
+	&.has-no-icon-fill {
+
+		span.wp-block-list-item__icon {
+
+			svg {
+				fill: none;
+			}
+		}
+	}
+}

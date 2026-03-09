@@ -1,0 +1,377 @@
+/* stylelint-disable no-descending-specificity */
+
+// Add icons to List Item blocks and style appropriately in the editor.
+.wp-block-list-item[class*="has-icon__"] {
+	list-style: none;
+
+	// Styles the icon using pseudo-elements
+	&::after,
+	&::before {
+		display: inline-block;
+		background-color: currentcolor;
+		-webkit-mask-size: contain;
+		mask-size: contain;
+		-webkit-mask-position: center;
+		mask-position: center;
+		-webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		height: 1em;
+		width: 1em;
+	}
+
+	// By default, icon appears on the right (after the text)
+	&::after {
+		content: "";
+	}
+
+	&::before {
+		content: none;
+	}
+
+	&.has-icon-position__left {
+
+		// When positioned left, icon appears before the text
+		&::after {
+			content: none;
+		}
+
+		&::before {
+			content: "";
+		}
+	}
+}
+
+// Style "Icon Settings" panel.
+.list-icon-picker {
+
+	.components-panel__row {
+
+		&:not(:nth-child(2)) {
+			margin-top: 16px;
+		}
+	}
+
+	.list-icon-picker__grid {
+		border: 1px solid rgb(148, 148, 148);
+		border-radius: 2px;
+		padding: 2px;
+		width: 100%;
+	}
+
+	.list-icon-picker__settings {
+		flex-wrap: wrap;
+		gap: 16px;
+
+		.components-toggle-control {
+			flex-basis: 100%;
+			margin-bottom: 0;
+		}
+	}
+}
+
+// Adjust z-order of the dropdown popover so it appears
+// under the media upload modal.
+.components-popover.enable-button-icon-dropdown-content {
+	z-index: 159000;
+}
+
+// Style for the icon library modal.
+.wp-block-outermost-icon-inserter__modal {
+
+	.components-modal__content {
+		flex: 1 1 0%;
+		overflow: auto;
+		padding: 0;
+
+		&::before {
+			margin-bottom: 0;
+		}
+	}
+
+	.icon-inserter {
+		align-items: stretch;
+		display: flex;
+		height: 100%;
+	}
+
+	.icon-inserter__sidebar {
+		display: none;
+		flex-direction: column;
+		flex-shrink: 0;
+		overflow-y: scroll;
+		width: 280px;
+		padding: 24px 32px 32px;
+
+		@media ( min-width: 900px ) {
+			display: flex;
+		}
+
+		&__search {
+			margin-bottom: 16px;
+
+			.components-base-control__field {
+				margin-bottom: 0;
+			}
+		}
+
+		&__category-type {
+			// Override core component styles.
+			border: none;
+
+			.components-menu-group__label {
+				margin: 0;
+				padding: 16px 12px 16px;
+			}
+
+			.components-menu-item__item {
+				align-items: flex-start;
+				display: inline-flex;
+				justify-content: space-between;
+				white-space: normal;
+				width: 100%;
+				text-align: left;
+				text-transform: capitalize;
+
+				> span {
+					opacity: 0.5;
+				}
+			}
+		}
+	}
+
+	.icon-inserter__content {
+		display: flex;
+		flex-direction: column;
+		flex-shrink: 0;
+		overflow: auto;
+		padding-top: 24px;
+		padding-right: 32px;
+		width: 100%;
+
+		@media ( min-width: 900px ) {
+			width: calc(100% - 281px);
+		}
+
+		.icon-inserter__content-header {
+			align-items: center;
+			display: flex;
+			height: 40px;
+			justify-content: space-between;
+			margin-bottom: 24px;
+
+			.search-results {
+				color: #757575;
+			}
+
+			.icon-controls__size {
+				display: flex;
+				align-items: center;
+				margin-right: 6px;
+
+				> span {
+					font-size: 11px;
+					font-weight: 500;
+					line-height: 1.4;
+					text-transform: uppercase;
+					display: block;
+					margin-right: 18px;
+				}
+
+				.components-range-control {
+					width: 116px;
+
+					.components-base-control__field {
+						margin-bottom: 0;
+					}
+				}
+			}
+		}
+
+		.icons-list {
+			padding: 4px 4px 72px 4px;
+			margin: 0;
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+
+			@media ( min-width: 600px ) {
+				grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+			}
+
+			@media ( min-width: 900px ) {
+				grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+			}
+
+			@media ( min-width: 1100px ) {
+				grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+			}
+
+			@media ( min-width: 1450px ) {
+				grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+			}
+
+			@media ( min-width: 1600px ) {
+				grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
+			}
+
+			.icons-list__item {
+
+				&.is-active {
+					background-color: var(--wp-admin-theme-color);
+					color: rgb(255 255 255 / 80%);
+
+					&:hover {
+						color: #fff !important;
+					}
+
+					svg {
+						fill: #fff;
+					}
+
+					&.has-no-icon-fill {
+
+						svg {
+							color: #fff;
+							fill: none;
+						}
+					}
+				}
+			}
+		}
+
+		.block-editor-inserter__no-results {
+			height: calc(100% - 56px);
+			margin-top: 0;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			svg {
+				margin: 0 auto;
+			}
+		}
+	}
+}
+
+// Styles for the custom SVG inserter modal.
+.wp-block-outermost-icon-custom-inserter__modal {
+
+	.components-modal__content {
+		flex: 1 1 0%;
+		overflow: auto;
+		padding: 0;
+
+		> div:nth-child(2) {
+			height: 100%;
+		}
+
+		&::before {
+			margin-bottom: 0;
+		}
+	}
+
+	.icon-custom-inserter {
+		align-items: stretch;
+		display: flex;
+		flex-direction: column;
+		gap: 32px;
+		height: 100%;
+		padding: 0 32px 32px;
+
+		@media ( min-width: 900px ) {
+			flex-direction: row;
+		}
+	}
+
+	.icon-custom-inserter__content {
+		min-height: 400px;
+
+		@media ( min-width: 900px ) {
+			width: calc(100% - 400px);
+		}
+
+		.components-base-control,
+		.components-base-control__field,
+		.components-textarea-control__input {
+			height: 100%;
+		}
+
+		textarea {
+			resize: none;
+		}
+	}
+
+	.icon-custom-inserter__sidebar {
+		flex-shrink: 0;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		@media ( min-width: 900px ) {
+			width: 400px;
+		}
+
+		.icon-preview__window {
+			border: 1px solid #ddd;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 20px;
+			min-height: 250px;
+			max-height: 400px;
+			overflow: scroll;
+
+			&.is-default {
+
+				svg {
+					opacity: 0.3;
+				}
+			}
+
+			svg {
+				max-width: 100%;
+			}
+		}
+
+		.icon-controls {
+			display: flex;
+			justify-content: center;
+			padding: 12px 24px;
+		}
+
+		.icon-controls__size {
+			display: flex;
+			align-items: center;
+
+			> span {
+				font-size: 11px;
+				font-weight: 500;
+				line-height: 1.4;
+				text-transform: uppercase;
+				display: block;
+				margin-right: 18px;
+			}
+
+			.components-range-control {
+				width: 116px;
+
+				.components-base-control__field {
+					margin-bottom: 0;
+				}
+			}
+		}
+
+		.components-notice {
+			margin: 12px 0 24px;
+
+			// Needed to fix color error in Notice component.
+			&.is-error {
+				background-color: #f8ebea;
+			}
+		}
+
+		.icon-insert-buttons {
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+}
