@@ -37,5 +37,9 @@
     "@wordpress/icons": "^9.35.0",
     "@wordpress/scripts": "^31.6.0",
     "webpack-remove-empty-scripts": "^0.8.4"
+  },
+  "overrides": {
+    "@base-ui/react": "1.2.0",
+    "es-abstract": "1.24.1"
   }
 }

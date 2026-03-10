@@ -124,6 +124,10 @@ function enable_list_icons_render_block_list_item( $block_content, $block, $inst
 		? $parent_defaults['defaultIconSpacing']
 		: ( isset( $block['attrs']['iconSpacing'] ) ? $block['attrs']['iconSpacing'] : '' );
 
+	$icon_vertical_alignment = $use_default_settings && ! empty( $parent_defaults['defaultIconVerticalAlignment'] )
+		? $parent_defaults['defaultIconVerticalAlignment']
+		: ( isset( $block['attrs']['iconVerticalAlignment'] ) ? $block['attrs']['iconVerticalAlignment'] : 'center' );
+
 	// Determine effective custom icon color.
 	$custom_icon_color = $use_default_settings && ! empty( $parent_defaults['defaultCustomIconColor'] )
 		? $parent_defaults['defaultCustomIconColor']
@@ -157,12 +161,18 @@ function enable_list_icons_render_block_list_item( $block_content, $block, $inst
 	$p = new WP_HTML_Tag_Processor( $block_content );
 
 	if ( $p->next_tag( 'li' ) ) {
+		// WordPress doesn't add wp-block-list-item class on the frontend,
+		// but our CSS selectors require it. Add it so styles apply.
+		$p->add_class( 'wp-block-list-item' );
 		$p->add_class( 'has-icon__' . sanitize_html_class( $icon_name ) );
 		if ( $has_no_icon_fill ) {
 			$p->add_class( 'has-no-icon-fill' );
 		}
 		if ( $position_left ) {
 			$p->add_class( 'has-icon-position__left' );
+		}
+		if ( $icon_vertical_alignment && 'center' !== $icon_vertical_alignment ) {
+			$p->add_class( 'has-icon-align__' . sanitize_html_class( $icon_vertical_alignment ) );
 		}
 
 		// Apply custom properties to the <li> tag.
@@ -242,14 +252,21 @@ function enable_list_icons_render_block_list_item( $block_content, $block, $inst
 	// Sanitize the icon SVG.
 	$sanitized_icon = wp_kses( $icon, $allowed_svg_tags );
 
-	// Add the SVG icon either to the left or right of the list item text.
+	// Build the icon markup.
 	$icon_markup = '<span class="wp-block-list-item__icon' . $icon_color_class . '" aria-hidden="true"' . $icon_style_attr . '>' . $sanitized_icon . '</span>';
 
-	// Inject icon inside the <li> tag, either before or after the text content.
-	// The list item content starts right after the opening <li> tag.
-	$block_content = $position_left
-		? preg_replace( '/(<li[^>]*>)/i', '$1' . $icon_markup, $block_content, 1 )
-		: preg_replace( '/(<\/li>)/i', $icon_markup . '$1', $block_content, 1 );
+	// Wrap the text content in a span so it stays as a single flex item.
+	// List items can contain inline elements (strong, a, em) and nested lists (ul/ol).
+	// Only the inline text content should be wrapped — nested lists stay outside.
+	$block_content = preg_replace(
+		'/(<li[^>]*>)(.*?)(<(?:ul|ol)\b|<\/li>)/is',
+		'$1<span class="wp-block-list-item__content">$2</span>$3',
+		$block_content,
+		1
+	);
+
+	// Inject icon inside the <li> tag (always before the content span).
+	$block_content = preg_replace( '/(<li[^>]*>)/i', '$1' . $icon_markup, $block_content, 1 );
 
 	return $block_content;
 }

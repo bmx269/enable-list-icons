@@ -3,7 +3,13 @@
 	list-style: none;
 	display: flex;
 	gap: var(--icon-spacing, 0.5em);
-	align-items: baseline;
+	align-items: var(--icon-vertical-align, center);
+
+	// Text content wrapper keeps inline elements together as one flex item
+	span.wp-block-list-item__content {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
 
 	span.wp-block-list-item__icon {
 		line-height: 0;
@@ -13,7 +19,7 @@
 		flex-shrink: 0;
 		width: var(--icon-size, 1em);
 		height: var(--icon-size, 1em);
-		align-self: center;
+		order: 1; // Default: icon appears after text (right)
 
 		svg {
 			color: currentcolor;
@@ -24,8 +30,23 @@
 		}
 	}
 
-	// Default: icon appears after text (at end)
-	// The icon span is injected before </li>, so it naturally appears at the end.
+	// When positioned left, icon appears before text
+	&.has-icon-position__left span.wp-block-list-item__icon {
+		order: -1;
+	}
+
+	// Vertical alignment options
+	&.has-icon-align__top {
+		align-items: flex-start;
+	}
+
+	&.has-icon-align__center {
+		align-items: center;
+	}
+
+	&.has-icon-align__bottom {
+		align-items: flex-end;
+	}
 
 	// Support for stroke-based icons (e.g., Lucide)
 	&.has-no-icon-fill {

@@ -12,7 +12,7 @@ Easily add icons to List Block items in WordPress.
 
 == Description ==
 
-Enable List Icons makes it simple to add and customize icons for your WordPress List Block items. Whether you're building a feature list, checklist, or any styled list, this plugin provides intuitive controls for adding beautiful icons to your list items.
+Enable List Icons makes it simple to add and customize icons for your WordPress List Block items. Whether you're building a feature list, checklist, or any styled list, this plugin provides intuitive controls for adding beautiful icons to your list items. Icons replace the default bullet markers and render inline with your text.
 
 **Recommended Companion Plugin:** Use the [Icon Block](https://wordpress.org/plugins/icon-block/) plugin to add custom icon sets and expand your icon library options. Icon Block is a powerful companion that allows you to register additional icon libraries for use with Enable List Icons.
 
@@ -25,7 +25,7 @@ Enable List Icons makes it simple to add and customize icons for your WordPress 
 
 **Icon Positioning**
 * Position icons before or after list item text (left/right)
-* Flexible alignment options
+* Vertical alignment control (top, center, bottom) for precise icon placement relative to text
 
 **Icon Styling**
 * Adjust icon dimensions with a slider control (supports px, em, rem units)
@@ -35,7 +35,7 @@ Enable List Icons makes it simple to add and customize icons for your WordPress 
 
 **List Block Default Settings**
 Set default icon settings at the List block level that apply to all child list items:
-* Configure size, spacing, color, position, and styling once for the entire list
+* Configure size, spacing, color, position, alignment, and styling once for the entire list
 * Individual list items can inherit defaults or use custom settings
 * Works seamlessly with multiple and nested List blocks
 
@@ -72,6 +72,10 @@ Absolutely! You can use icons from the built-in library, upload SVG files from y
 
 Yes! Select the List block (parent container) and configure default icon settings that will apply to all child list items. Individual items can still override these defaults if needed.
 
+= How does vertical alignment work? =
+
+The vertical alignment control lets you align icons relative to the text: top, center (default), or bottom. This is especially useful when icons are larger than the text line height.
+
 == Screenshots ==
 
 1. Icon selection interface showing library, media, and custom SVG options
@@ -85,9 +89,10 @@ Yes! Select the List block (parent container) and configure default icon setting
 * Initial release
 * Icon selection (library, media, custom SVG)
 * Icon positioning (left/right)
+* Vertical alignment control (top, center, bottom)
 * Icon styling (size, spacing, color, no fill option)
-* List block default settings
-* Support for core/list-item blocks
+* List block default settings with inheritance
+* Support for core/list and core/list-item blocks
 
 == Upgrade Notice ==
 

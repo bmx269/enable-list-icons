@@ -1,13 +1,26 @@
 /* stylelint-disable no-descending-specificity */
 
 // Add icons to List Item blocks and style appropriately in the editor.
+// Only use ::before for icon rendering to avoid conflicts with
+// WordPress core's use of ::after for block hover/selection outlines.
 .wp-block-list-item[class*="has-icon__"] {
 	list-style: none;
+	display: flex;
+	gap: var(--icon-spacing, 0.5em);
+	align-items: var(--icon-vertical-align, center);
 
-	// Styles the icon using pseudo-elements
-	&::after,
+	// Ensure ::after is never used for icons — WP core reserves it for block UI.
+	&::after {
+		-webkit-mask-image: none !important;
+		mask-image: none !important;
+		background-color: transparent !important;
+	}
+
+	// Use ::before exclusively for the icon
 	&::before {
+		content: "";
 		display: inline-block;
+		flex-shrink: 0;
 		background-color: currentcolor;
 		-webkit-mask-size: contain;
 		mask-size: contain;
@@ -17,27 +30,25 @@
 		mask-repeat: no-repeat;
 		height: 1em;
 		width: 1em;
+		order: 1; // Default: icon appears after text (right)
 	}
 
-	// By default, icon appears on the right (after the text)
-	&::after {
-		content: "";
+	// When positioned left, icon appears before text
+	&.has-icon-position__left::before {
+		order: -1;
 	}
 
-	&::before {
-		content: none;
+	// Vertical alignment options
+	&.has-icon-align__top {
+		align-items: flex-start;
 	}
 
-	&.has-icon-position__left {
+	&.has-icon-align__center {
+		align-items: center;
+	}
 
-		// When positioned left, icon appears before the text
-		&::after {
-			content: none;
-		}
-
-		&::before {
-			content: "";
-		}
+	&.has-icon-align__bottom {
+		align-items: flex-end;
 	}
 }
 

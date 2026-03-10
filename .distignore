@@ -13,7 +13,6 @@
 .gitignore
 CLAUDE.md
 README.md
-deploy.sh
 package.json
 package-lock.json
 webpack.config.js

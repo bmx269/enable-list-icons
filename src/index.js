@@ -27,6 +27,7 @@ import {
 	NavigableMenu,
 	PanelBody,
 	PanelRow,
+	SelectControl,
 	ToggleControl,
 	ToolbarButton,
 	__experimentalGrid as Grid, // eslint-disable-line
@@ -82,6 +83,10 @@ function addAttributes( settings ) {
 				type: 'boolean',
 				default: false,
 			},
+			defaultIconVerticalAlignment: {
+				type: 'string',
+				default: 'center',
+			},
 		};
 
 		return {
@@ -131,6 +136,10 @@ function addAttributes( settings ) {
 		useDefaultIconSettings: {
 			type: 'boolean',
 			default: true,
+		},
+		iconVerticalAlignment: {
+			type: 'string',
+			default: 'center',
 		},
 	};
 
@@ -188,6 +197,7 @@ const withBlockControls = createHigherOrderComponent( ( BlockEdit ) => {
 				defaultCustomIconColor,
 				defaultIconPositionLeft,
 				defaultHasNoIconFill,
+				defaultIconVerticalAlignment,
 			} = attributes;
 
 			const colorGradientSettings = useMultipleOriginColorsAndGradients();
@@ -265,6 +275,43 @@ const withBlockControls = createHigherOrderComponent( ( BlockEdit ) => {
 									} }
 								/>
 							</PanelRow>
+							<SelectControl
+								label={ __(
+									'Icon vertical alignment',
+									'enable-list-icons'
+								) }
+								value={
+									defaultIconVerticalAlignment || 'center'
+								}
+								options={ [
+									{
+										label: __(
+											'Top',
+											'enable-list-icons'
+										),
+										value: 'top',
+									},
+									{
+										label: __(
+											'Center',
+											'enable-list-icons'
+										),
+										value: 'center',
+									},
+									{
+										label: __(
+											'Bottom',
+											'enable-list-icons'
+										),
+										value: 'bottom',
+									},
+								] }
+								onChange={ ( value ) => {
+									setAttributes( {
+										defaultIconVerticalAlignment: value,
+									} );
+								} }
+							/>
 						</PanelBody>
 					</InspectorControls>
 					<InspectorControls group="color">
@@ -306,6 +353,7 @@ const withBlockControls = createHigherOrderComponent( ( BlockEdit ) => {
 			customIconColor,
 			iconSize,
 			iconSpacing,
+			iconVerticalAlignment,
 			useDefaultIconSettings,
 		} = attributes;
 		const { allowedMimeTypes } = GetAllowedMimeTypes();
@@ -532,6 +580,45 @@ const withBlockControls = createHigherOrderComponent( ( BlockEdit ) => {
 											} }
 											units={ [ 'px', 'em', 'rem' ] }
 										/>
+										<SelectControl
+											label={ __(
+												'Icon vertical alignment',
+												'enable-list-icons'
+											) }
+											value={
+												iconVerticalAlignment ||
+												'center'
+											}
+											options={ [
+												{
+													label: __(
+														'Top',
+														'enable-list-icons'
+													),
+													value: 'top',
+												},
+												{
+													label: __(
+														'Center',
+														'enable-list-icons'
+													),
+													value: 'center',
+												},
+												{
+													label: __(
+														'Bottom',
+														'enable-list-icons'
+													),
+													value: 'bottom',
+												},
+											] }
+											onChange={ ( value ) => {
+												setAttributes( {
+													iconVerticalAlignment:
+														value,
+												} );
+											} }
+										/>
 									</>
 								) }
 							</PanelBody>
@@ -645,11 +732,17 @@ function addClasses( BlockListBlock ) {
 			parentListDefaults?.defaultHasNoIconFill !== undefined
 				? parentListDefaults.defaultHasNoIconFill
 				: attributes?.hasNoIconFill;
+		const effectiveIconVerticalAlignment =
+			useDefaults && parentListDefaults?.defaultIconVerticalAlignment
+				? parentListDefaults.defaultIconVerticalAlignment
+				: attributes?.iconVerticalAlignment || 'center';
 
 		const id = useInstanceId( BlockListBlock );
 		const selectorPrefix = `wp-block-list-item-has-icon-`;
 		const selectorClassname = `${ selectorPrefix }${ id }`;
-		const selector = `.${ selectorClassname }::before, .${ selectorClassname }::after`;
+		// Only use ::before for icons to avoid conflict with WP core's
+		// use of ::after for block hover/selection outlines.
+		const selector = `.${ selectorClassname }::before`;
 
 		// Get CSS string for the current icon.
 		// The CSS and `style` element is only output if it is not empty.
@@ -667,6 +760,9 @@ function addClasses( BlockListBlock ) {
 			'has-icon__custom': attributes?.icon && ! attributes?.iconName,
 			'has-icon-position__left': effectiveIconPositionLeft,
 			'has-no-icon-fill': effectiveHasNoIconFill,
+			[ `has-icon-align__${ effectiveIconVerticalAlignment }` ]:
+				effectiveIconVerticalAlignment &&
+				effectiveIconVerticalAlignment !== 'center',
 			[ `${ selectorClassname }` ]: true,
 		} );
 
