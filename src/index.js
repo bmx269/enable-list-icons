@@ -222,10 +222,7 @@ const withBlockControls = createHigherOrderComponent( ( BlockEdit ) => {
 								</p>
 							</PanelRow>
 							<DimensionControl
-								label={ __(
-									'Icon size',
-									'enable-list-icons'
-								) }
+								label={ __( 'Icon size', 'enable-list-icons' ) }
 								value={ defaultIconSize || '' }
 								onChange={ ( value ) => {
 									setAttributes( { defaultIconSize: value } );
@@ -285,10 +282,7 @@ const withBlockControls = createHigherOrderComponent( ( BlockEdit ) => {
 								}
 								options={ [
 									{
-										label: __(
-											'Top',
-											'enable-list-icons'
-										),
+										label: __( 'Top', 'enable-list-icons' ),
 										value: 'top',
 									},
 									{
